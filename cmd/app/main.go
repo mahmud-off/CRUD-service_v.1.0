@@ -4,13 +4,21 @@ import (
 	"log"
 	"net/http"
 
+	cfg "github.com/mahmud-off/crudUsers/internal/config/config"
 	"github.com/mahmud-off/crudUsers/internal/server/server"
 	"github.com/mahmud-off/crudUsers/internal/services/database"
 )
 
 func main() {
 
-	db, err := database.NewDB("postgres", "host=127.0.0.1 port=5432 user= dbname= sslmode=disable password=")
+	cfg, err := cfg.NewConfig()
+
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	db, err := database.NewDB(cfg.GetDB(), cfg.GetDBSource())
 	if err != nil {
 		log.Fatal(err)
 	}
